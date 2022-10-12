@@ -3,12 +3,12 @@ import Item from 'components/Item/Item';
 import css from './Gallery.module.css';
 
 
-export default function Gallery({ images, openModal }) {
+export default function Gallery({ images }) {
 return (
 <>
 <ul className={css.imageGallery}>
     {images.map((image, idx) => (
-<Item key={idx} image={image} openModal={openModal} />
+<Item key={idx} image={image} />
     ))}
 </ul>
     ;
@@ -18,5 +18,4 @@ return (
 
 Gallery.propTypes = {
   images: PropTypes.array.isRequired,
-  openModal: PropTypes.func.isRequired,
 };

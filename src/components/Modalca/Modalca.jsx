@@ -1,43 +1,38 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import css from './Modalca.module.css';
 
-class Modalca extends Component {
-  static propTypes = {
-    onClose: PropTypes.func.isRequired,
-    imgUrl: PropTypes.string,
-    imageTags: PropTypes.string,
-  };
+export default function Modalca({ onClose, imageUrl, imageTags }) {
+  useEffect(() => {
+    const handleKeyDown = e => {
+      if (e.code === 'Escape') {
+        onClose();
+      }
+    };
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+    window.addEventListener('keydown', handleKeyDown);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
 
-  handleKeyDown = e => {
-    if (e.code === 'Escape') {
-      this.props.onClose();
-    }
-  };
-
-  handleBackdropClick = e => {
+  const handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
-      this.props.onClose();
+      onClose();
     }
   };
-
-  render() {
-    return (
-      <div className={css.overlay} onClick={this.handleBackdropClick}>
-        <div className={css.modal}>
-          <img src={this.props.imageUrl} alt={this.props.imageTags} />
-        </div>
+  return (
+    <div className={css.overlay} onClick={handleBackdropClick}>
+      <div className={css.modal}>
+        <img src={imageUrl} alt={imageTags} />
       </div>
-    );
-  }
+    </div>
+  );
 }
 
-export default Modalca;
+Modalca.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  imageUrl: PropTypes.string.isRequired,
+  imageTags: PropTypes.string.isRequired,
+};
